@@ -8,7 +8,7 @@ numArr.sort((a, b) => a - b);
 const result = [];
 const used = new Array(N).fill(false);
 
-const backtracking = (depth) => {
+const dfs = (depth) => {
   if (depth === M) {
     console.log(result.join(" "));
     return;
@@ -26,4 +26,4 @@ const backtracking = (depth) => {
   }
 };
 
-backtracking(0);
+dfs(0);
