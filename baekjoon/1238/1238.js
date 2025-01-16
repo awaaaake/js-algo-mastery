@@ -89,7 +89,6 @@ const dijkstra = (start) => {
       const newDist = currDist + weight;
       if (newDist < distances[nextNode]) {
         distances[nextNode] = newDist;
-        distances[nextNode] = newDist;
         pq.push([newDist, nextNode]);
       }
     }
