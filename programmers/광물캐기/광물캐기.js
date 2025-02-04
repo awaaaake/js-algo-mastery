@@ -19,30 +19,21 @@ function solution(picks, minerals) {
       return;
     }
 
-    if (remain[0] >= 1) {
-      let nextTotal = total;
-      let i;
-      for (i = start; i < start + 5 && i < minerals.length; i++) {
-        nextTotal += 피로도[0][index[minerals[i]]];
+    for (let type of [0, 1, 2]) {
+      if (remain[type] >= 1) {
+        let nextTotal = total;
+        let i;
+        for (i = start; i < start + 5 && i < minerals.length; i++) {
+          nextTotal += 피로도[type][index[minerals[i]]];
+        }
+        if (type === 0) {
+          dfs([remain[0] - 1, remain[1], remain[2]], nextTotal, i);
+        } else if (type === 1) {
+          dfs([remain[0], remain[1] - 1, remain[2]], nextTotal, i);
+        } else {
+          dfs([remain[0], remain[1], remain[2] - 1], nextTotal, i);
+        }
       }
-      dfs([remain[0] - 1, remain[1], remain[2]], nextTotal, i);
-    }
-    if (remain[1] >= 1) {
-      let nextTotal = total;
-      let i;
-      for (i = start; i < start + 5 && i < minerals.length; i++) {
-        nextTotal += 피로도[1][index[minerals[i]]];
-      }
-
-      dfs([remain[0], remain[1] - 1, remain[2]], nextTotal, i);
-    }
-    if (remain[2] >= 1) {
-      let nextTotal = total;
-      let i;
-      for (i = start; i < start + 5 && i < minerals.length; i++) {
-        nextTotal += 피로도[2][index[minerals[i]]];
-      }
-      dfs([remain[0], remain[1], remain[2] - 1], nextTotal, i);
     }
   };
 
