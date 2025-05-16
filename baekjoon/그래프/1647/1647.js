@@ -30,7 +30,7 @@ for (let i = 1; i <= M; i++) {
 edges.sort((a, b) => a[0] - b[0]);
 let totalCost = 0;
 let maxCost = 0;
-for (let [cost, a, b] of edges) {
+for (let [cost, a, b] of edges) {//간선의 비용이 작은것 부터
   if (find(a) !== find(b)) {
     union(a, b);
     totalCost += cost;

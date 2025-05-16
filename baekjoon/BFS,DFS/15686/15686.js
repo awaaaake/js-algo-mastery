@@ -38,7 +38,7 @@ const getMinDist = () => {
 };
 
 const result = [];
-const bfs = (prevIndex, depth) => {
+const dfs = (prevIndex, depth) => {
   if (depth === M) {
     result.push(getMinDist()); //도시의 치킨 거리 구하기기
     return;
@@ -46,10 +46,10 @@ const bfs = (prevIndex, depth) => {
 
   for (let i = prevIndex; i < stores.length; i++) {
     checked[i] = true;
-    bfs(i + 1, depth + 1);
+    dfs(i + 1, depth + 1);
     checked[i] = false;
   }
 };
 
-bfs(0, 0);
+dfs(0, 0);
 console.log(Math.min(...result));
