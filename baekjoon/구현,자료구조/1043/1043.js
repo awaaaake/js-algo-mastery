@@ -28,10 +28,10 @@ while (index < trues.length) {
   const p = trues[index];
 
   for (let nP of adjList[p]) {
- 
+    if (!tOrF[nP]) {
       tOrF[nP] = true;
       trues.push(nP);
-    
+    }
   }
 
   index++;
