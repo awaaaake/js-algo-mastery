@@ -20,10 +20,10 @@ let answer = 0;
 const days = Array(10001).fill(false); // 최대 d값이 10000
 
 for (let lecture of candidates) {
-  for (let day = lecture.day; day >= 1; day--) {
+  for (let d = lecture.day; d >= 1; d--) {
     if (!days[d]) {
       days[d] = true;
-      answer == lecture.pay;
+      answer += lecture.pay;
       break;
     }
   }
