@@ -1,28 +1,31 @@
-const fs = require("fs");
-const [N, r, c] = fs
-  .readFileSync("./baekjoon/class2/example.txt", "utf-8")
+const input = require("fs")
+  .readFileSync("./baekjoon/example.txt", "utf-8")
   .toString()
   .trim()
-  .split(" ")
-  .map(Number);
+  .split("\n")
+  .map((row) => row.split(" ").map(Number));
 
+const [N, r, c] = input[0]; //r,c는 0행이상
 let res = 0;
-const divide = (row, col, size) => {
-  if (row === r && col === c) {
-    //좌표 찾음
+
+//cnt는 0부터 시작
+function divide(size, x, y) {
+  if (x === r && y === c) {
+    //r행 c열의 값이라면
     console.log(res);
     return;
   }
 
-  if (r >= row && r < row + size && c >= 0 && c < col + size) {
-    //영역 내에 있음
+  if (r >= x && r < x + size && c >= y && c < y + size) {
+    //현재 네모영역안에 r,c가 존재하는지, 네모영역 밖이면 현재 네모영역의 크기를 더해줄뿐
     size = parseInt(size / 2);
-    //divide 호출순서는 좌상, 우상, 좌하, 우하 순으로 Z로 방문해야함
-    divide(row, col, size);
-    divide(row, col + size, size);
-    divide(row + size, col, size);
-    divide(row + size, col + size, size);
+    //좌상, 우상,좌하, 우하 순으로 방문
+    divide(size, x, y);
+    divide(size, x, y + size);
+    divide(size, x + size, y);
+    //z순서대로 방문하므로, 좌표를 벗어난 네모 영역은 좌표가 발견된 이후이므로, 실행되지x
+    divide(size, x + size, y + size);
   } else res += size * size;
-};
+}
 
-divide(0, 0, Math.pow(2, N));
+divide(Math.pow(2, N), 0, 0);
