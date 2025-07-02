@@ -4,14 +4,13 @@ const input = require("fs")
   .trim()
   .split("\n");
 
-//부분문자열 길이가 고정 -> 슬라이딩 윈도우
 const [N, C] = input.shift().split(" ").map(Number);
 const pos = input.map(Number);
 pos.sort((a, b) => a - b);
 
 //가장 인접한 두 공유기 사이의 최대 거리
 let start = 1; //가능한 최소 거리
-let end = pos[pos.length - 1] - pos[0]; //가능한 최대 거리
+let end = pos[N - 1] - pos[0]; //가능한 최대 거리
 
 while (start <= end) {
   const mid = Math.floor((start + end) / 2);
