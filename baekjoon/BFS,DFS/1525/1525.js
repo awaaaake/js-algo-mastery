@@ -10,17 +10,20 @@ const target = "123456780";
 
 const visited = new Set([start]);
 
-//주어진 입력 -> 1,2,3,4,5,6,7,8,0로 배열
-//최소 이동횟수 -> bfs
-
 const dx = [0, 0, -1, 1];
 const dy = [1, -1, 0, 0];
 
 const queue = [[start, 0]];
-let index = 0;
+let idx = 0;
 
-while (index < queue.length) {
-  const [cur, cnt] = queue[index++];
+while (idx < queue.length) {
+  const swap = (str, i, j) => {
+    const arr = [...str];
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+    return arr.join("");
+  };
+
+  const [cur, cnt] = queue[idx++];
 
   if (cur === target) {
     console.log(cnt);
@@ -35,17 +38,15 @@ while (index < queue.length) {
     const nx = x + dx[i];
     const ny = y + dy[i];
 
-    if (nx < 0 || nx >= 3 || ny < 0 || ny >= 3) continue;
-
-    const nextIdx = nx * 3 + ny;
-    const arr = cur.split("");
-    [arr[zero], arr[nextIdx]] = [arr[nextIdx], arr[zero]];
-    const next = arr.join("");
-
-    if (!visited.has(next)) {
-      visited.add(next);
-      queue.push([next, cnt + 1]);
+    if (nx < 3 && nx >= 0 && ny < 3 && ny >= 0) {
+      const nextIdx = nx * 3 + ny;
+      const next = swap(cur, zero, nextIdx);
+      if (!visited.has(next)) {
+        visited.add(next);
+        queue.push([next, cnt + 1]);
+      }
     }
   }
 }
+
 console.log(-1);
