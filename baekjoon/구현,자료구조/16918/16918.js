@@ -11,8 +11,7 @@ const input = require("fs")
 const [R, C, N] = input[0].split(" ").map(Number);
 const init = input.slice(1).map((row) => row.trim().split(""));
 const dx = [0, 0, -1, 1];
-const dy = [1, -1, 0, 0]; //dx,dy 변수를 사용하는 bomb함수를 호출하기 이전에 선언되어야한다 -> 블록범위 스코프
-
+const dy = [1, -1, 0, 0];
 let answer;
 if (N === 1) answer = init;
 else if (N % 2 === 0) {
