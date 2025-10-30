@@ -1,58 +1,64 @@
 function solution(n, info) {
-  //dfs
-  let result = [0, []];
-  const scoreOfAppeach = info.reduce((acc, curr, i) => {
-    if (curr === 0) return acc;
-    return acc + 10 - i;
-  }, 0);
+    //라이언은 어피치를 가장 큰 점수 차이로 이기기 위해서 
+    //n발의 화살을 어떤 과녁 점수에 맞혀야 하는지    
+    const counted = new Array(11).fill(0);//라이언의 [10점 개수, 9점 개수, 8점 개수, .... , 0점 개수];
+    let max = [0, [-1]];
 
-  const dfs = (i, remain, scoreInfo) => {
-    if (remain < 0) return;
-    if (remain === 0 || i === 0) {
-      const scoreDiff = scoreInfo[1] - scoreInfo[0];
-
-      if (scoreDiff >= result[0]) {
-        const temp = [...scoreInfo[2]];
-        for (let i = 0; i < 10 - scoreInfo[2].length + 1; i++) {
-          temp.push(0);
+    const dfs = (used, start) => {
+        if(used < 0) {
+            return;
         }
-        if (i === 0 && remain > 0) temp[temp.length - 1] = remain;
-        let change = true;
-        if (scoreDiff === result[0]) {
-          for (let i = 10; i >= 0; i--) {
-            if(result[1][i] < temp[i]) break;
-            if (result[1][i] !== 0 && temp[i] === 0) { //if(result[1][i] > temp[i]) 이게 왜 안되는지 모르겠다..
-              //기존 result에서 낮은 점수가 더 많이 나오면
-              change = false;
-              break;
+        
+        if(start === 11) {
+            if(used > 0) counted[10] += used;
+            let lionSc = 0, ApeachSc = 0;
+            
+            for(let i=0; i<=10; i++) {
+                const cntOfLion = counted[i];
+                const cntOfAppeach = info[i];
+                
+                if(cntOfLion === 0 && cntOfAppeach === 0) {
+                    continue;
+                } else if(cntOfLion > cntOfAppeach) {
+                    lionSc += (10-i);
+                } else if(cntOfAppeach >= cntOfLion) {
+                    //a = b일 경우는 어피치가 k점을 가져갑니다.
+                    ApeachSc += (10-i);
+                }
             }
-          }
+            
+            const diff = lionSc - ApeachSc;
+            if(diff > 0) {
+                if(diff === max[0]) {
+                    for(let i=10; i>=0; i--) {
+                        if(counted[i] > max[1][i]) {
+                            max[1] = [...counted];
+                            break;
+                        } else if (counted[i] < max[1][i]) {
+                            break;
+                        }
+                    }
+                }
+                
+                if(diff > max[0]) {
+                    max = [diff, [...counted]];
+                }
+            } 
+            
+            return;
         }
-        if (change) result = [scoreDiff, temp];
-      }
-      return;
+        
+        for(let i=start; i<11; i++) {    
+            //라이언이 승리하는 경우
+            counted[i] = (i===n ? used : (info[i] + 1));
+            dfs(used - counted[i], i+1);
+            
+            //어피치가 승리하거나 동점인 경우
+            counted[i] = 0;
+            dfs(used, i+1);
+        }
     }
-
-    dfs(i - 1, remain - (info[10 - i] + 1), [
-      info[10 - i] === 0 ? scoreInfo[0] : scoreInfo[0] - i,
-      scoreInfo[1] + i,
-      scoreInfo[2].length === 0
-        ? [info[10 - i] + 1]
-        : [...scoreInfo[2], info[10 - i] + 1],
-    ]);
-    dfs(i - 1, remain, [
-      scoreInfo[0],
-      scoreInfo[1],
-      scoreInfo[2].length === 0 ? [0] : [...scoreInfo[2], 0],
-    ]);
-  };
-
-  dfs(10, n, [scoreOfAppeach, 0, []]); //과녁점수, 남은 화살개수, [어피치점수, 라이언점수, 라이언 기록]
-  return result[1].length === 0 ? [-1] : result[1];
+    
+    dfs(n, 0);
+    return max[1];
 }
-
-solution(
-  5,
-  [2, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0],
-  [0, 2, 2, 0, 1, 0, 0, 0, 0, 0, 0]
-);
